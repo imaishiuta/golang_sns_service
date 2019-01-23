@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title>demo</title>
+      <style>
+        input { display: block; }
+        ul { list-style: none; }
+      </style>
+  </head>
+  <body>
+    <h2>マイページ</h2>
+    <h2>{{.User.Name}}</h2>
+    <div class="news-feeds">
+      <div class="news-feed">
+        {{range .User.Messages}}
+        <div class="news-feed-name">
+          <p>{{.User.Name}}</p>
+        </div>
+        <div class="news-feed-text">
+          {{ .Text }}
+        </div>
+        {{ end }}
+      </div>
+      <a href="/" action="GET">トップページへ</a>
+     </div>
+  </body>
+</html>

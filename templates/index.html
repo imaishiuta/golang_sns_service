@@ -1,0 +1,83 @@
+<html>
+  <head>
+    <title>demo</title>
+      <style>
+        input { display: block; }
+        ul { list-style: none; }
+      </style>
+  </head>
+  <body>
+    <header class="head-container">
+      <div class="head-wrapper">
+        <ul class="head-lists">
+          <li>facebook</li>
+          <li>username</li>
+          <li>home</li>
+        </ul>
+      </div>
+    </header>
+    <div class="main">
+      <div class="form-wrapper">
+        <form id="postbox" action="/post" method="post" enctype="multipart/form-data">
+          <a href="#">投稿を作成</a>
+          <input class="textarea" type="text" name="text">
+          <label for="message">select files</label>
+          <input class="filearea" type="file">
+          <input id="postbox" class="submitbtn" type="submit" />
+        </form>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js">
+        </script>
+      </div>
+      <div class="news-feeds">
+        {{ range .messages }}
+        <div class="news-feed">
+          <div class="news-feed-name">
+            <p>{{.User.Name}}</p>
+          </div>
+          <div class="news-feed-text">
+            <p>{{.Text}}</p>
+          </div>
+        </div>
+        {{ end }}
+      </div>
+    </div>
+  <script>
+  $(function(){
+    function buildHTML(data) {
+      var html = `<div class="news-feed">
+                    <div class="news-feed-name">
+                      <p>username</p>
+                    </div>
+                    <div class="news-feed-text">
+                      <p>${data.Text}</p>
+                    </div>
+                  </div>`
+      return html;
+    }
+
+    $("#postbox").submit(function(e){
+      var formData = new FormData( this );
+      var msgBox = $(".textarea");
+      e.preventDefault()
+      $.ajax({
+        type: "POST",
+        url: "/post",
+        data: formData,
+        dataType: 'json',
+        processData: false,
+        contentType: false
+      })
+      .done(function(data){
+        var posts = $(".news-feeds");
+        var html = buildHTML(data);
+        posts.append(html);
+        msgBox.val("");
+      })
+      .fail(function(data){
+        alert('error')
+      });
+    });
+    });
+  </script>
+  </body>
+</html>
