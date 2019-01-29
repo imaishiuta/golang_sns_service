@@ -1,0 +1,53 @@
+<html>
+  <head>
+  </head>
+  <body>
+    <p>{{.message.Text}}</p>
+    <p>{{.message.User.Name}}</p>
+    <p class="comment-feed"></p>
+    <form id="postbox" action="/message/{{.message.ID}}/comments" method="post" enctype="multipart/form-data">
+      <p>コメントする</p>
+      <input class="textarea" type="text" name="text">
+      <input id="postbox" class="submitbtn" type="submit" />
+    </form>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js">
+    </script>
+  </body>
+  <script>
+  $(function(){
+    function buildHTML(data) {
+      var html = `<div class="news-feed">
+                    <div class="news-feed-name">
+                      <p>username</p>
+                    </div>
+                    <div class="news-feed-text">
+                      <p>${data.Text}</p>
+                    </div>
+                  </div>`
+      return html;
+    }
+    $("#postbox").submit(function(e){
+      var formData = new FormData( this );
+      var msgBox = $(".textarea");
+      e.preventDefault()
+      $.ajax({
+        type: "POST",
+        url: "/message/{{.message.ID}}/comments",
+        data: formData,
+        dataType: 'json',
+        processData: false,
+        contentType: false
+      })
+      .done(function(data){
+        var posts = $(".comment-feed");
+        var html = buildHTML(data);
+        posts.append(html);
+        msgBox.val("");
+      })
+      .fail(function(data){
+        alert('error')
+      });
+    });
+    });
+  </script>
+</html>
