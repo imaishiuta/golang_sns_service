@@ -3,7 +3,6 @@ package controller
 import (
   "github.com/gin-gonic/gin"
   "../data"
-  //"fmt"
   "../session"
 )
 
@@ -54,4 +53,21 @@ func UserMyPageRouter(c *gin.Context) {
   c.HTML(200, "mypage.html", gin.H{
     "User": user,
     })
+}
+
+func MessageShow(c *gin.Context) {
+  id := c.Param("id")
+  message := data.Get_Message(id)
+  c.HTML(200, "message_show.html", gin.H{
+    "message": message,
+    })
+}
+
+func PostCommentRouter(c *gin.Context) {
+  text := c.PostForm("text")
+  id := c.Param("id")
+  data.Post_Comment(c, id, text)
+  c.JSON(200, gin.H{
+    "Comment": text,
+  })
 }
