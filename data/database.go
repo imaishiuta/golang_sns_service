@@ -47,6 +47,7 @@ func Create_text(c *gin.Context, text string) {
     fmt.Println(err)
   }
   defer db.Close()
+  fmt.Println(db)
   session := sessions.Default(c)
   user_id := session.Get("userID")
   msg := Message{Text: text, UserId: user_id.(uint)}

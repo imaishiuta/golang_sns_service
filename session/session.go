@@ -3,7 +3,7 @@ package session
 import (
   "github.com/gin-gonic/gin"
   "github.com/gin-gonic/contrib/sessions"
-  "reflect"
+  "../data"
 )
 
 type SessionInfo struct {
@@ -12,12 +12,11 @@ type SessionInfo struct {
   IsSessionAlive bool
 }
 
-func Login(c *gin.Context, user interface{}) {
-  vuser := reflect.ValueOf(user)
+func Login(c *gin.Context, user data.User) {
   session := sessions.Default(c)
   session.Set("alive", true)
-  session.Set("userID", vuser.FieldByName("ID").Interface())
-  session.Set("uemail", vuser.FieldByName("Email").Interface())
+  session.Set("userID", user.ID)
+  session.Set("uemail", user.Email)
   session.Save()
 }
 

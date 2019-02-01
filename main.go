@@ -16,6 +16,8 @@ func main() {
   server.Use(sessions.Sessions("SessionName", store))
 
   server.LoadHTMLGlob("templates/*")
+  server.Static("/assets", "./assets")
+  server.Static("/css","../assets/*")
   server.GET("/", controller.IndexRouter)
   server.POST("/post", controller.PostRouter)
   server.GET("/signup", controller.SignupRouter)
